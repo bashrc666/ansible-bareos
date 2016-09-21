@@ -1,0 +1,12 @@
+---
+# handlers file for bareos-client
+
+- name: enable bareos-fd
+  service: name=bareos-fd enabled=yes
+
+- name: restart bareos-fd
+  service: name=bareos-fd state=restarted
+
+- name: reload bareos-dir
+  delegate_to: "{{ bareos_director }}"
+  raw: echo reload | bconsole > /dev/null 

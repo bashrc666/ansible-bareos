@@ -1,0 +1,3 @@
+---
+# tasks file for bareos-client
+- include: centos7.yml

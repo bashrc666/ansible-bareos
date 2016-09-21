@@ -1,0 +1,7 @@
+---
+# vars file for bareos-client
+bareos_dir_hostname: hypervisor
+bareos_mon_hostname: hypervisor
+bareos_dir_password: yTbdkJn5X5+054JxwPDKMXdAxKuusQ5G/Ps+VaWj8FvL
+bareos_mon_password: 7MsAz6BD7hHDhuc91dBsogjECyuCMK9MdMze239crAhG
+bareos_director: hypervisor.otoole.local 

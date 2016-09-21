@@ -1,0 +1,52 @@
+JobDefs {
+  Name = "Gitlab-Def"
+  Type = Backup
+  Level = Incremental
+  Client = gitlab-fd
+  FileSet = "Gitlab-Fset"                     # selftest fileset                            (#13)
+  Schedule = "WeeklyCycle"
+  Storage = File
+  Messages = Standard
+  Pool = Incremental
+  Priority = 10
+  Write Bootstrap = "/var/lib/bareos/%c.bsr"
+  Full Backup Pool = Full                  # write Full Backups into "Full" Pool         (#05)
+  Differential Backup Pool = Differential  # write Diff Backups into "Differential" Pool (#08)
+  Incremental Backup Pool = Incremental    # write Incr Backups into "Incremental" Pool  (#11)
+}
+
+Job {
+  Name = "Backup-Gitlab"
+  JobDefs = "Gitlab-Def"
+}
+
+Job {
+  Name = "Restore Gitlab"
+  Type = Restore
+  Client=hypervisor-fd
+  FileSet = "Gitlab-Fset"
+  Storage = File
+  Pool = Incremental
+  Messages = Standard
+  Where = /backup/bareos-restore
+}
+
+FileSet {
+  Name = "Gitlab-Fset"
+  Include {
+    Options {
+      Signature = MD5 # calculate md5 checksum per file
+    }
+    File = /etc
+    File = /var/opt/gitlab/backups/
+  }
+  #Exclude {
+  #}
+}
+
+Client {
+  Name = gitlab-fd
+  Address = gitlab
+  Password = "yTbdkJn5X5+054JxwPDKMXdAxKuusQ5G/Ps+VaWj8FvL"          # password for FileDaemon
+}
+

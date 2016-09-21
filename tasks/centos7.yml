@@ -1,0 +1,22 @@
+- name: "| BAREOS | Add bareos repo"
+  copy: src=files/centos7.repo dest=/etc/yum.repos.d/Bareos.repo
+  when: ( ansible_distribution == "CentOS" and ansible_distribution_major_version == "7" )
+
+- name: "| BAREOS | Install bareos fd"
+  yum: name=bareos-client state=latest update_cache=yes
+  when: (ansible_distribution  == "CentOS" and ansible_distribution_major_version == "7")
+  notify: enable bareos-fd
+
+- name: "| BAREOS | Add configuration to bareos-fd"
+  template: src=templates/bareos-fd.j2 dest=/etc/bareos/bareos-fd.conf force=yes
+  when: ( ansible_distribution  == "CentOS" and ansible_distribution_major_version == "7")
+  notify: restart bareos-fd
+
+- name: "| BAREOS | Add configuration to director"
+  delegate_to: "{{ bareos_director }}"
+  template: src=templates/bareos-dir.j2 dest=/etc/bareos/clientdefs/{{ ansible_hostname }}.conf force=yes
+
+- name: "| BAREOS | Include conf to director"
+  delegate_to: "{{ bareos_director }}"
+  lineinfile: dest=/etc/bareos/bareos-dir.conf line="@/etc/bareos/clientdefs/{{ ansible_hostname }}.conf"
+  notify: reload bareos-dir
