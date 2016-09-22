@@ -4,6 +4,9 @@
 - name: enable bareos-fd
   service: name=bareos-fd enabled=yes
 
+- name: add bareos repo key
+  apt_key: url=http://download.bareos.org/bareos/release/latest/Debian_8.0/Release.key
+
 - name: restart bareos-fd
   service: name=bareos-fd state=restarted
 

@@ -1,15 +1,16 @@
 - name: "| BAREOS | Add bareos repo"
-  copy: src=files/Ubuntu16.04.repo dest=/etc/apt/sourceis.list.d/bareos.list
-  when: ( ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "16.04" )
+  copy: src=files/deblike.repo dest=/etc/apt/sourceis.list.d/bareos.list
+  when: ( ansible_distribution == "Ubuntu" or ansible_distribution == "Debian" )
+  notify:  add bareos repo key
 
 - name: "| BAREOS | Install bareos fd"
   apt: name=bareos-client state=latest update_cache=yes
-  when: (ansible_distribution  == "Ubuntu" and ansible_distribution_major_version == "16.04")
+  when: ( ansible_distribution == "Ubuntu" or ansible_distribution == "Debian" )
   notify: enable bareos-fd
 
 - name: "| BAREOS | Add configuration to bareos-fd"
   template: src=templates/bareos-fd.j2 dest=/etc/bareos/bareos-fd.conf force=yes
-  when: ( ansible_distribution  == "Ubuntu" and ansible_distribution_major_version == "16.04")
+  when: ( ansible_distribution == "Ubuntu" or ansible_distribution == "Debian" )
   notify: restart bareos-fd
 
 - name: "| BAREOS | Add configuration to director"
