@@ -1,3 +1,4 @@
 ---
 # tasks file for bareos-client
-- include: centos7.yml
+#- include: centos7.yml
+- include: ubuntu14.yml
