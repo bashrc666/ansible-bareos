@@ -1,5 +1,5 @@
 - name: Bareos Client 
-  hosts: testing 
+  hosts: all:!testing 
   vars_files:
     - "defaults/main.yml"
     - "vars/main.yml"

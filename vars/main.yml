@@ -1,7 +1,14 @@
 ---
 # vars file for bareos-client
-bareos_dir_hostname: hypervisor
-bareos_mon_hostname: hypervisor
-bareos_dir_password: yTbdkJn5X5+054JxwPDKMXdAxKuusQ5G/Ps+VaWj8FvL
-bareos_mon_password: 7MsAz6BD7hHDhuc91dBsogjECyuCMK9MdMze239crAhG
-bareos_director: hypervisor.otoole.local 
+
+### Default vars for bareos-client 
+bareos_dir_hostname: 
+bareos_mon_hostname: 
+bareos_dir_password:
+bareos_mon_password:
+bareos_director:  # string
+bareos_setup_dir: # boolean
+
+### Default vars for backup on bareos fd 
+bareos_file_backup: ['/etc', '/opt'] # this is a list
+bareos_file_exclude: ['/tmp', '/var'] # this is a list

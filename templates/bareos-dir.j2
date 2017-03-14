@@ -1,9 +1,9 @@
 JobDefs {
-  Name = "Gitlab-Def"
+  Name = "{{ansible_hostname}}-Def"
   Type = Backup
   Level = Incremental
-  Client = gitlab-fd
-  FileSet = "Gitlab-Fset"                     # selftest fileset                            (#13)
+  Client = {{ansible_hostname}}-fd
+  FileSet = "{{ansible_hostname}}-Fset"                     # selftest fileset                            (#13)
   Schedule = "WeeklyCycle"
   Storage = File
   Messages = Standard
@@ -16,37 +16,39 @@ JobDefs {
 }
 
 Job {
-  Name = "Backup-Gitlab"
-  JobDefs = "Gitlab-Def"
+  Name = "Backup-{{ansible_hostname}}"
+  JobDefs = "{{ansible_hostname}}-Def"
 }
 
 Job {
-  Name = "Restore Gitlab"
+  Name = "Restore {{ansible_hostname}}"
   Type = Restore
-  Client=hypervisor-fd
-  FileSet = "Gitlab-Fset"
+  Client={{ansible_hostname}}-fd
+  FileSet = "{{ansible_hostname}}-Fset"
   Storage = File
   Pool = Incremental
   Messages = Standard
-  Where = /backup/bareos-restore
 }
 
 FileSet {
-  Name = "Gitlab-Fset"
+  Name = "{{ansible_hostname}}-Fset"
   Include {
     Options {
       Signature = MD5 # calculate md5 checksum per file
     }
-    File = /etc
-    File = /var/opt/gitlab/backups/
+  {% for row in bareos_file_backup %}
+  File={{row}}
+  {% endfor %}
   }
-  #Exclude {
-  #}
+  Exclude {
+  {% for row in bareos_file_exclude %}
+  File={{row}}
+  {% endfor %}
+  }
 }
 
 Client {
-  Name = gitlab-fd
-  Address = gitlab
-  Password = "yTbdkJn5X5+054JxwPDKMXdAxKuusQ5G/Ps+VaWj8FvL"          # password for FileDaemon
+  Name = {{ansible_hostname}}-fd
+  Address = {{ansible_hostname}}
+  Password = "{{bareos_dir_password}}"          # password for FileDaemon
 }
-

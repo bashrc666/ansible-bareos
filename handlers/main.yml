@@ -7,6 +7,10 @@
 - name: restart bareos-fd
   service: name=bareos-fd state=restarted
 
+- name: add client conf to director 
+  delegate_to: "{{ bareos_director }}"
+  template: src=templates/bareos-dir.j2 dest=/etc/bareos/clientdefs/{{ ansible_hostname }}.conf force=yes
+
 - name: reload bareos-dir
   delegate_to: "{{ bareos_director }}"
   raw: echo reload | bconsole > /dev/null 
